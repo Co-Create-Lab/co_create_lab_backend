@@ -1,5 +1,4 @@
 const express = require("express");
-const projectRouter = express.Router();
 
 const {
   getAllProjects,
@@ -8,6 +7,8 @@ const {
   deleteProject,
   updateProject,
 } = require("../controllers/projects");
+
+const projectRouter = express.Router();
 
 projectRouter.get("/", getAllProjects);
 projectRouter.get("/:id", getOneProject);
