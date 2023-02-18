@@ -8,6 +8,8 @@ const {
   updateProject,
 } = require("../controllers/projects");
 
+const { verifyToken } = require("../middlewares/verifyToken");
+
 const projectRouter = express.Router();
 
 projectRouter.get("/", getAllProjects);

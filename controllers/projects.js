@@ -1,11 +1,12 @@
 const Project = require("../models/projects");
+const { ErrorResponse } = require("../utils/ErrorResponse");
 
-const getAllProjects = async (req, res) => {
+const getAllProjects = async (req, res, next) => {
   try {
     const project = await Project.find();
     res.status(200).json(project);
   } catch (error) {
-    res.status(500).json(error.message);
+    next(error);
   }
 };
 
@@ -16,7 +17,7 @@ const getOneProject = async (req, res) => {
     const project = await Project.findById(id);
     res.json(project);
   } catch (error) {
-    res.status(500).send(error.messages);
+    next(error);
   }
 };
 
@@ -40,7 +41,7 @@ const createProject = async (req, res) => {
     });
     res.status(201).json(project);
   } catch (error) {
-    res.status(500).send(error.messages);
+    next(error);
   }
 };
 
@@ -54,18 +55,17 @@ const updateProject = async (req, res) => {
     });
     res.json(project);
   } catch (error) {
-    res.status(500).send(error.messages);
+    next(error);
   }
 };
 
 const deleteProject = async (req, res) => {
   const { id } = req.params;
-
   try {
     const project = await Project.findByIdAndDelete(id);
     res.json(project);
   } catch (error) {
-    res.status(500).send(error.messages);
+    next(error);
   }
 };
 

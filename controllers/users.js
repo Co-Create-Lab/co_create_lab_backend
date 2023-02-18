@@ -1,0 +1,91 @@
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { ErrorResponse } = require("../utils/ErrorResponse");
+
+const signup = async (req, res, next) => {
+  try {
+    const { username, email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user) throw new ErrorResponse("User already exists", 400);
+
+    const hash = await bcrypt.hash(password, 5);
+
+    const newUser = await User.create({ username, email, password: hash });
+
+    const payload = { id: newUser._id, email: newUser.email };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: process.env.COOKIE_MAXAGE,
+    });
+
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        maxAge: process.env.COOKIE_MAXAGE,
+      })
+      .send(payload);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+    if (!user)
+      throw new ErrorResponse("No account connected with that email ", 404);
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) throw new ErrorResponse("Wrong password", 401);
+
+    const payload = { id: user._id, email: user.email };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: process.env.COOKIE_MAXAGE,
+    });
+
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        maxAge: process.env.COOKIE_MAXAGE,
+      })
+      .send(payload);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const logout = async (req, res, next) => {
+  try {
+    res
+      .cookie("access_token", "", {
+        httpOnly: true,
+        maxAge: 0,
+      })
+      .send("LOGOUT");
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getProfile = async (req, res, next) => {};
+const updateUser = async (req, res, next) => {};
+
+module.exports = {
+  signup,
+  login,
+  logout,
+  getUsers,
+  updateUser,
+  getProfile,
+};
