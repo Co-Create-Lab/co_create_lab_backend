@@ -14,6 +14,7 @@ const projectRouter = express.Router();
 
 projectRouter.get("/", getAllProjects);
 projectRouter.get("/:id", getOneProject);
+// projectRouter.get("/myprojects/:id", getUserProjects);
 projectRouter.post("/", createProject);
 projectRouter.put("/:id", updateProject);
 projectRouter.delete("/:id", deleteProject);
