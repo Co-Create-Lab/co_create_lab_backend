@@ -5,15 +5,25 @@ const { ErrorResponse } = require("../utils/ErrorResponse");
 
 const signup = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { first_name, username, email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) throw new ErrorResponse("User already exists", 400);
 
     const hash = await bcrypt.hash(password, 5);
 
-    const newUser = await User.create({ username, email, password: hash });
+    const newUser = await User.create({
+      first_name,
+      username,
+      email,
+      password: hash,
+    });
 
-    const payload = { id: newUser._id, email: newUser.email };
+    const payload = {
+      id: newUser._id,
+      email: newUser.email,
+      username: newUser.username,
+      first_name: newUser.first_name,
+    };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.COOKIE_MAXAGE,
     });
@@ -69,7 +79,7 @@ const logout = async (req, res, next) => {
   }
 };
 
-const getUsers = async (req, res) => {
+const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
     res.json(users);
@@ -78,7 +88,16 @@ const getUsers = async (req, res) => {
   }
 };
 
-const getProfile = async (req, res, next) => {};
+const getProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateUser = async (req, res, next) => {};
 
 module.exports = {
@@ -86,6 +105,6 @@ module.exports = {
   login,
   logout,
   getUsers,
-  updateUser,
   getProfile,
+  updateUser,
 };

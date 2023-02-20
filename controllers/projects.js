@@ -10,18 +10,17 @@ const getAllProjects = async (req, res, next) => {
   }
 };
 
-const getOneProject = async (req, res) => {
+const getOneProject = async (req, res, next) => {
   const { id } = req.params;
-
   try {
-    const project = await Project.findById(id);
+    const project = await Project.findById(id).populate("creator");
     res.json(project);
   } catch (error) {
     next(error);
   }
 };
 
-const createProject = async (req, res) => {
+const createProject = async (req, res, next) => {
   const {
     project_name,
     description,
@@ -30,6 +29,7 @@ const createProject = async (req, res) => {
     start_date,
     tech_stack,
   } = req.body;
+  const creator = req.user.id;
   try {
     const project = await Project.create({
       project_name,
@@ -38,6 +38,7 @@ const createProject = async (req, res) => {
       location,
       start_date,
       tech_stack,
+      creator,
     });
     res.status(201).json(project);
   } catch (error) {
@@ -45,7 +46,7 @@ const createProject = async (req, res) => {
   }
 };
 
-const updateProject = async (req, res) => {
+const updateProject = async (req, res, next) => {
   const { id } = req.params;
   const { project_name, description, location, categories, tech_stack } =
     req.body;
@@ -59,7 +60,7 @@ const updateProject = async (req, res) => {
   }
 };
 
-const deleteProject = async (req, res) => {
+const deleteProject = async (req, res, next) => {
   const { id } = req.params;
   try {
     const project = await Project.findByIdAndDelete(id);
