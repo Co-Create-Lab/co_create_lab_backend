@@ -13,6 +13,22 @@ const getAllProjects = async (req, res, next) => {
   }
 };
 
+const getSortedProjects = async (req, res, next) => {
+  const {
+    createdAt,
+    start_date} = req.query
+
+    const sort = {}
+    if (createdAt) sort.createdAt = createdAt
+    if (start_date) sort.start_date = start_date
+  try {
+    const project = await Project.find({}).sort(sort);
+    res.status(200).json(project);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getFilteredProjects = async (req, res, next) => {
    const {
      keyword,
@@ -27,6 +43,8 @@ const getFilteredProjects = async (req, res, next) => {
    if(location) filter.location = location
    if(start_date) filter.start_date = start_date
    if(categories) filter.categories = {$all: categories.split(',')}
+
+   console.log(filter)
 
   try {
     const project = await Project.find(filter);
@@ -113,5 +131,6 @@ module.exports = {
   createProject,
   deleteProject,
   updateProject,
-  getFilteredProjects
+  getFilteredProjects,
+  getSortedProjects
 };

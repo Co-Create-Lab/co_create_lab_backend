@@ -6,9 +6,10 @@ const {
   createProject,
   deleteProject,
   updateProject,
+  getFilteredProjects,
+  getSortedProjects
   getUserProjects,
   getFilteredProjects
-
 } = require("../controllers/projects");
 
 const { verifyToken } = require("../middlewares/verifyToken");
@@ -16,6 +17,9 @@ const { verifyToken } = require("../middlewares/verifyToken");
 const projectRouter = express.Router();
 
 projectRouter.get("/", getAllProjects);
+projectRouter.get("/sort", getSortedProjects);
+
+
 projectRouter.get("/search", getFilteredProjects);
 
 projectRouter.get("/:id", getOneProject);
