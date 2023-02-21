@@ -21,6 +21,7 @@ const getSortedProjects = async (req, res, next) => {
     const sort = {}
     if (createdAt) sort.createdAt = createdAt
     if (start_date) sort.start_date = start_date
+
   try {
     const project = await Project.find({}).sort(sort);
     res.status(200).json(project);
@@ -44,7 +45,6 @@ const getFilteredProjects = async (req, res, next) => {
    if(start_date) filter.start_date = start_date
    if(categories) filter.categories = {$all: categories.split(',')}
 
-   console.log(filter)
 
   try {
     const project = await Project.find(filter);
@@ -53,6 +53,39 @@ const getFilteredProjects = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+const getFilteredSortedProjects = async (req, res, next) => {
+  const {
+    keyword,
+    categories,
+    location,
+    start_dateF,
+    tech_stack,
+    start_date,
+    createdAt
+  } = req.query
+
+
+  const filter = {}
+  if (keyword) filter.$text = { $search: keyword }
+  if(location) filter.location = location
+  if(start_dateF) filter.start_dateF = start_dateF
+  if(categories) filter.categories = {$all: categories.split(',')}
+
+ const sort = {}
+    if (createdAt) sort.createdAt = createdAt
+    if (start_date) sort.start_date = start_date
+
+  console.log(filter)
+  console.log(sort)
+ try {
+   const project = await Project.find(filter).sort(sort);
+   res.status(200).json(project);
+   
+ } catch (error) {
+   next(error);
+ }
 };
 
 const getOneProject = async (req, res, next) => {
@@ -132,5 +165,6 @@ module.exports = {
   deleteProject,
   updateProject,
   getFilteredProjects,
-  getSortedProjects
+  getSortedProjects,
+  getFilteredSortedProjects
 };
