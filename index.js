@@ -9,10 +9,13 @@ const { projectRouter } = require("./routes/projects.js");
 const { errorHandler } = require("./middlewares/errorHandler");
 const { verifyToken } = require("./middlewares/verifyToken.js");
 
+
 require("./db");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+
 
 app.use(
   cors({
@@ -20,6 +23,7 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 app.use(express.json());
 
