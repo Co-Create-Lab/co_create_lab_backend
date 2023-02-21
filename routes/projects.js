@@ -6,7 +6,9 @@ const {
   createProject,
   deleteProject,
   updateProject,
+  getUserProjects,
   getFilteredProjects
+
 } = require("../controllers/projects");
 
 const { verifyToken } = require("../middlewares/verifyToken");
@@ -17,8 +19,8 @@ projectRouter.get("/", getAllProjects);
 projectRouter.get("/search", getFilteredProjects);
 
 projectRouter.get("/:id", getOneProject);
-// projectRouter.get("/myprojects/:id", getUserProjects);
-projectRouter.post("/", createProject);
+projectRouter.get("/myprojects/:id", verifyToken, getUserProjects);
+projectRouter.post("/", verifyToken, createProject);
 projectRouter.put("/:id", updateProject);
 projectRouter.delete("/:id", deleteProject);
 

@@ -47,6 +47,16 @@ const getOneProject = async (req, res, next) => {
   }
 };
 
+const getUserProjects = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const project = await Project.find({ creator: id });
+    res.json(project);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const createProject = async (req, res, next) => {
   const {
     project_name,
@@ -99,6 +109,7 @@ const deleteProject = async (req, res, next) => {
 module.exports = {
   getAllProjects,
   getOneProject,
+  getUserProjects,
   createProject,
   deleteProject,
   updateProject,
