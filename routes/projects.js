@@ -8,6 +8,8 @@ const {
   updateProject,
   getFilteredProjects,
   getSortedProjects
+  getUserProjects,
+  getFilteredProjects
 } = require("../controllers/projects");
 
 const { verifyToken } = require("../middlewares/verifyToken");
@@ -21,8 +23,8 @@ projectRouter.get("/sort", getSortedProjects);
 projectRouter.get("/search", getFilteredProjects);
 
 projectRouter.get("/:id", getOneProject);
-// projectRouter.get("/myprojects/:id", getUserProjects);
-projectRouter.post("/", createProject);
+projectRouter.get("/myprojects/:id", verifyToken, getUserProjects);
+projectRouter.post("/", verifyToken, createProject);
 projectRouter.put("/:id", updateProject);
 projectRouter.delete("/:id", deleteProject);
 
