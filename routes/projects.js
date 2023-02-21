@@ -7,9 +7,8 @@ const {
   deleteProject,
   updateProject,
   getFilteredProjects,
-  getSortedProjects
+  getSortedProjects,
   getUserProjects,
-  getFilteredProjects
 } = require("../controllers/projects");
 
 const { verifyToken } = require("../middlewares/verifyToken");
