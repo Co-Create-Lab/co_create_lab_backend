@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 
 const projectSchema = new Schema(
   {
-    creator: { type: mongoose.ObjectId, ref: "User", required: true },
-    project_name: { type: String, required: true },
-    description: [{ type: String, required: true }],
+    creator: { type: mongoose.ObjectId, ref: "User" },
+    project_name: { type: String, required: true, text: true },
+    description: [{ type: String, required: true, text : true }],
     location: { type: String, required: true },
     start_date: { type: String, default: "Open" },
     categories: [{ type: String, required: true }],
