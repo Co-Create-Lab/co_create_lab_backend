@@ -14,9 +14,9 @@ const getAllProjects = async (req, res, next) => {
 const getSortedProjects = async (req, res, next) => {
   const { createdAt, start_date } = req.query;
 
-    const sort = {}
-    if (createdAt) sort.createdAt = createdAt
-    if (start_date) sort.start_date = start_date
+  const sort = {};
+  if (createdAt) sort.createdAt = createdAt;
+  if (start_date) sort.start_date = start_date;
 
   try {
     const project = await Project.find({}).sort(sort);
@@ -36,7 +36,6 @@ const getFilteredProjects = async (req, res, next) => {
   if (categories) filter.categories = { $all: categories.split(",") };
   if (tech_stack) filter.tech_stack = { $all: tech_stack.split(",") };
 
-
   try {
     const project = await Project.find(filter);
     res.status(200).json(project);
@@ -53,30 +52,26 @@ const getFilteredSortedProjects = async (req, res, next) => {
     start_dateF,
     tech_stack,
     start_date,
-    createdAt
-  } = req.query
+    createdAt,
+  } = req.query;
 
-
-  const filter = {}
-  if (keyword) filter.$text = { $search: keyword }
-  if(location) filter.location = location
-  if(start_dateF) filter.start_dateF = start_dateF
-  if(categories) filter.categories = {$all: categories.split(',')}
+  const filter = {};
+  if (keyword) filter.$text = { $search: keyword };
+  if (location) filter.location = location;
+  if (start_dateF) filter.start_dateF = start_dateF;
+  if (categories) filter.categories = { $all: categories.split(",") };
   if (tech_stack) filter.tech_stack = { $all: tech_stack.split(",") };
 
+  const sort = {};
+  if (createdAt) sort.createdAt = createdAt;
+  if (start_date) sort.start_date = start_date;
 
- const sort = {}
-    if (createdAt) sort.createdAt = createdAt
-    if (start_date) sort.start_date = start_date
-
-
- try {
-   const project = await Project.find(filter).sort(sort);
-   res.status(200).json(project);
-   
- } catch (error) {
-   next(error);
- }
+  try {
+    const project = await Project.find(filter).sort(sort);
+    res.status(200).json(project);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getOneProject = async (req, res, next) => {
@@ -91,7 +86,7 @@ const getOneProject = async (req, res, next) => {
 
 const getUserProjects = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.user;
     const project = await Project.find({ creator: id });
     res.json(project);
   } catch (error) {
@@ -129,9 +124,17 @@ const updateProject = async (req, res, next) => {
   const { id } = req.params;
   const { project_name, description, location, categories, tech_stack } =
     req.body;
+  const creator = req.user.id;
   try {
     const project = await Project.findByIdAndUpdate(id, {
-      $set: { project_name, description, location, categories, tech_stack },
+      $set: {
+        project_name,
+        description,
+        location,
+        categories,
+        tech_stack,
+        creator,
+      },
     });
     res.json(project);
   } catch (error) {
@@ -158,5 +161,5 @@ module.exports = {
   updateProject,
   getFilteredProjects,
   getSortedProjects,
-  getFilteredSortedProjects
+  getFilteredSortedProjects,
 };
