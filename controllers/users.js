@@ -50,7 +50,11 @@ const login = async (req, res, next) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) throw new ErrorResponse("Wrong password", 401);
 
-    const payload = { id: user._id, email: user.email };
+    const payload = {
+      id: user._id,
+      email: user.email,
+      username: user.username,
+    };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.COOKIE_MAXAGE,
     });
@@ -90,7 +94,7 @@ const getUsers = async (req, res, next) => {
 
 const getProfile = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.user;
     const user = await User.findById(id);
     res.json(user);
   } catch (error) {
