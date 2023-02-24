@@ -135,7 +135,9 @@ const updateProject = async (req, res, next) => {
         tech_stack,
         creator,
       },
-    });
+    },
+    { new: true }
+    );
     res.json(project);
   } catch (error) {
     next(error);
