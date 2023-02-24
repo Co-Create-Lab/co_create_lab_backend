@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(
   cors({
-    origin: "https://tranquil-peony-73eb04.netlify.app/",
+    origin: "https://tranquil-peony-73eb04.netlify.app",
     credentials: true,
   })
 );
