@@ -3,11 +3,9 @@ const { ErrorResponse } = require("../utils/ErrorResponse");
 
 const verifyToken = (req, res, next) => {
   try {
-    //console.log(req.cookies.access_token);
     const token = req.cookies.access_token;
     if (token) {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      // console.log(payload);
       req.user = payload;
       next();
     } else {

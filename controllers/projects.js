@@ -126,17 +126,47 @@ const updateProject = async (req, res, next) => {
     req.body;
   const creator = req.user.id;
   try {
-    const project = await Project.findByIdAndUpdate(id, {
-      $set: {
-        project_name,
-        description,
-        location,
-        categories,
-        tech_stack,
-        creator,
+    const project = await Project.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          project_name,
+          description,
+          location,
+          categories,
+          tech_stack,
+          creator,
+        },
       },
-    },
-    { new: true }
+      { new: true }
+    );
+    res.json(project);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateLikes = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const project = await Project.findByIdAndUpdate(
+      id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+    res.json(project);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateViews = async (req, res, next) => {
+  const { id } = req.body;
+  try {
+    const project = await Project.findByIdAndUpdate(
+      id,
+      { $inc: { views: 1 } },
+      { new: true },
     );
     res.json(project);
   } catch (error) {
@@ -164,4 +194,6 @@ module.exports = {
   getFilteredProjects,
   getSortedProjects,
   getFilteredSortedProjects,
+  updateLikes,
+  updateViews,
 };
