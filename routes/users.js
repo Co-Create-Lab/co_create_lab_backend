@@ -6,6 +6,7 @@ const {
   updateUser,
   savedProject,
   removeProject,
+  getBookmarks,
 } = require("../controllers/users");
 
 const userRouter = express.Router();
@@ -16,5 +17,6 @@ userRouter.get("/", getUsers);
 userRouter.get("/profile", verifyToken, getProfile);
 userRouter.put("/:id", updateUser);
 userRouter.post("/bookmarks", verifyToken, savedProject);
-userRouter.delete("/remove", verifyToken, removeProject);
+userRouter.post("/remove", verifyToken, removeProject);
+userRouter.get("/bookmarks", verifyToken, getBookmarks);
 module.exports = { userRouter };

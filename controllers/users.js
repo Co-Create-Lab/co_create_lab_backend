@@ -115,7 +115,6 @@ const savedProject = async (req, res, next) => {
       },
       { new: true }
     ).populate("bookmark");
-    // console.log("ADDED", user);
     res.json(user.bookmark);
   } catch (error) {
     next(error);
@@ -125,7 +124,7 @@ const savedProject = async (req, res, next) => {
 const removeProject = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const { projectId } = req.params;
+    const { projectId } = req.body;
     const user = await User.findByIdAndUpdate(
       id,
       {
@@ -133,7 +132,16 @@ const removeProject = async (req, res, next) => {
       },
       { new: true }
     ).populate("bookmark");
-    // console.log("REMOVED", user);
+    res.json(user.bookmark);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getBookmarks = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const user = await User.findById(id).populate("bookmark");
     res.json(user.bookmark);
   } catch (error) {
     next(error);
@@ -149,4 +157,5 @@ module.exports = {
   updateUser,
   savedProject,
   removeProject,
+  getBookmarks,
 };
