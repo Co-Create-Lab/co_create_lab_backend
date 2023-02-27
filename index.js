@@ -37,7 +37,7 @@ const PORT = process.env.PORT || 8080;
 
 app.use(function (req, res, next) {
 
-  const allowedDomains = ['http://localhost:3000','https://tranquil-peony-73eb04.netlify.app' ];
+  const allowedDomains = ['http://localhost:3000','https://co-create-lab.netlify.app/' ];
   const origin = req.headers.origin;
   if(allowedDomains.indexOf(origin) > -1){
     res.setHeader('Access-Control-Allow-Origin', origin);
