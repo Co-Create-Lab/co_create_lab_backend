@@ -104,6 +104,42 @@ const getProfile = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {};
 
+const savedProject = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const { projectId } = req.body;
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: { bookmark: projectId },
+      },
+      { new: true }
+    ).populate("bookmark");
+    // console.log("ADDED", user);
+    res.json(user.bookmark);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const removeProject = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const { projectId } = req.params;
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        $pull: { bookmark: projectId },
+      },
+      { new: true }
+    ).populate("bookmark");
+    // console.log("REMOVED", user);
+    res.json(user.bookmark);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -111,4 +147,6 @@ module.exports = {
   getUsers,
   getProfile,
   updateUser,
+  savedProject,
+  removeProject,
 };
