@@ -15,14 +15,40 @@ require("./db");
 const app = express();
 const PORT = process.env.PORT || 8080;
 
+ app.use(
+   cors({
+     origin: ["https://co-create-lab.netlify.app", "http://localhost:3000"],
+     credentials: true,
+   })
+ );
 
+// const allowedDomains = ['https://tranquil-peony-73eb04.netlify.app', 'http://localhost:3000'];
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin) return callback(null, true);
+ 
+//     if (allowedDomains.indexOf(origin) === -1) {
+//       var msg = `This site ${origin} does not have an access. Only specific domains are allowed to access it.`;
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
+// app.use(function (req, res, next) {
+
+//   const allowedDomains = ['http://localhost:3000','https://co-create-lab.netlify.app' ];
+//   const origin = req.headers.origin;
+//   if(allowedDomains.indexOf(origin) > -1){
+//     res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+
+//   next();
+// })
+
 
 app.use(cookieParser());
 app.use(express.json());

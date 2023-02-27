@@ -166,7 +166,7 @@ const updateViews = async (req, res, next) => {
     const project = await Project.findByIdAndUpdate(
       id,
       { $inc: { views: 1 } },
-      { new: true }
+      { new: true },
     );
     res.json(project);
   } catch (error) {
