@@ -11,6 +11,22 @@ const getAllProjects = async (req, res, next) => {
   }
 };
 
+const getPaginateProjects = async (req, res, next) => {
+  const {offset, limit} = req.query
+  console.log(req.query)
+  try {
+    const project = await Project.find({})
+    .sort({'createdAt': -1})
+    .limit(limit)
+    .skip(offset)
+   
+    const count = await Project.countDocuments()
+    res.status(200).json({project, count});
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getSortedProjects = async (req, res, next) => {
   const { createdAt, start_date } = req.query;
 
@@ -166,7 +182,7 @@ const updateViews = async (req, res, next) => {
     const project = await Project.findByIdAndUpdate(
       id,
       { $inc: { views: 1 } },
-      { new: true },
+      { new: true }
     );
     res.json(project);
   } catch (error) {
@@ -196,4 +212,5 @@ module.exports = {
   getFilteredSortedProjects,
   updateLikes,
   updateViews,
+  getPaginateProjects
 };
