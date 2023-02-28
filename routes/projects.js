@@ -1,5 +1,6 @@
 const express = require("express");
 
+
 const {
   getAllProjects,
   getOneProject,
@@ -12,6 +13,7 @@ const {
   getFilteredSortedProjects,
   updateLikes,
   updateViews,
+  getPaginateProjects
 } = require("../controllers/projects");
 
 const { verifyToken } = require("../middlewares/verifyToken");
@@ -20,6 +22,9 @@ const projectRouter = express.Router();
 
 projectRouter.get("/", getAllProjects);
 projectRouter.get("/sort", getSortedProjects);
+projectRouter.get("/paginate", getPaginateProjects);
+
+
 
 projectRouter.get("/search", getFilteredProjects);
 projectRouter.get("/search/sort", getFilteredSortedProjects);
