@@ -1,7 +1,7 @@
 const Project = require("../models/projects");
 const { exists } = require("../models/user");
 const { ErrorResponse } = require("../utils/ErrorResponse");
-
+const mongoose = require("mongoose");
 const getAllProjects = async (req, res, next) => {
   try {
     const project = await Project.find();
@@ -167,15 +167,47 @@ const updateProject = async (req, res, next) => {
   }
 };
 
-const updateLikes = async (req, res, next) => {
-  const { id } = req.params;
+const likeProject = async (req, res, next) => {
   try {
+    const id = req.user.id;
+    const { projectId } = req.body;
+    const objectId = mongoose.Types.ObjectId(id);
     const project = await Project.findByIdAndUpdate(
-      id,
-      { $inc: { likes: 1 } },
+      projectId,
+      {
+        $addToSet: { likes: objectId },
+      },
       { new: true }
     );
-    res.json(project);
+    res.json(project.likes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const unLikeProject = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const { projectId } = req.body;
+    const objectId = mongoose.Types.ObjectId(id);
+    const project = await Project.findByIdAndUpdate(
+      projectId,
+      {
+        $pull: { likes: objectId },
+      },
+      { new: true }
+    );
+    res.json(project.likes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getLikes = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const project = await Project.findById(id);
+    res.json(project.likes);
   } catch (error) {
     next(error);
   }
@@ -215,7 +247,9 @@ module.exports = {
   getFilteredProjects,
   getSortedProjects,
   getFilteredSortedProjects,
-  updateLikes,
   updateViews,
+  likeProject,
+  unLikeProject,
+  getLikes,
   getPaginateProjects
 };

@@ -11,8 +11,10 @@ const {
   getSortedProjects,
   getUserProjects,
   getFilteredSortedProjects,
-  updateLikes,
   updateViews,
+  likeProject,
+  unLikeProject,
+  getLikes,
   getPaginateProjects
 } = require("../controllers/projects");
 
@@ -33,8 +35,10 @@ projectRouter.get("/:id", getOneProject);
 projectRouter.get("/myprojects/:id", verifyToken, getUserProjects);
 projectRouter.post("/", verifyToken, createProject);
 projectRouter.put("/:id", verifyToken, updateProject);
-projectRouter.put("/like/:id", updateLikes);
 projectRouter.post("/view", updateViews);
 projectRouter.delete("/:id", verifyToken, deleteProject);
+projectRouter.post("/like", verifyToken, likeProject);
+projectRouter.post("/removelike", verifyToken, unLikeProject);
+projectRouter.get("/like/:id", verifyToken, getLikes);
 
 module.exports = { projectRouter };
