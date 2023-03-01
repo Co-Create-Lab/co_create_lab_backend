@@ -11,7 +11,7 @@ const projectSchema = new Schema(
     categories: [{ type: String, required: true }],
     tech_stack: [{ type: String }],
     views: { type: Number, default: 0 },
-    likes: { type: Number, default: 0 },
+    likes: [{ type: mongoose.ObjectId, ref: "User", default: [] }],
   },
   { timestamps: true }
 );

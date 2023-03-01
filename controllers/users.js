@@ -141,7 +141,7 @@ const removeProject = async (req, res, next) => {
 const getBookmarks = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const user = await User.findById(id).populate("bookmark");
+    const user = await User.findById(id);
     res.json(user.bookmark);
   } catch (error) {
     next(error);
