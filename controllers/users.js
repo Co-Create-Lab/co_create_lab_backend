@@ -23,6 +23,7 @@ const signup = async (req, res, next) => {
       email: newUser.email,
       username: newUser.username,
       first_name: newUser.first_name,
+      bookmark: newUser.bookmark,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.COOKIE_MAXAGE,
@@ -54,6 +55,7 @@ const login = async (req, res, next) => {
       id: user._id,
       email: user.email,
       username: user.username,
+      bookmark: user.bookmark,
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: process.env.COOKIE_MAXAGE,
