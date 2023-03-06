@@ -12,15 +12,15 @@ const getAllProjects = async (req, res, next) => {
 };
 
 const getPaginateProjects = async (req, res, next) => {
-  const {offset, limit} = req.query
+  const { offset, limit } = req.query;
   try {
     const project = await Project.find({})
-    .sort({'createdAt': -1})
-    .limit(limit)
-    .skip(offset)
-   
-    const count = await Project.countDocuments()
-    res.status(200).json({project, count});
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip(offset);
+
+    const count = await Project.countDocuments();
+    res.status(200).json({ project, count });
   } catch (error) {
     next(error);
   }
@@ -71,7 +71,7 @@ const getFilteredSortedProjects = async (req, res, next) => {
     start_date,
     createdAt,
     views,
-    likes
+    likes,
   } = req.query;
 
   const filter = {};
@@ -251,5 +251,5 @@ module.exports = {
   likeProject,
   unLikeProject,
   getLikes,
-  getPaginateProjects
+  getPaginateProjects,
 };
