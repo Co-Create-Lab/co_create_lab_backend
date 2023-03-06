@@ -14,6 +14,8 @@ const projectSchema = new Schema(
     tech_stack: [{ type: String }],
     views: { type: Number, default: 0 },
     likes: [{ type: mongoose.ObjectId, ref: "User", default: [] }],
+    coordinates: [{ type: Number }],
+
   },
   { timestamps: true },
 );
