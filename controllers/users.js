@@ -2,6 +2,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { ErrorResponse } = require("../utils/ErrorResponse");
+const { collection } = require("../models/user");
 
 const signup = async (req, res, next) => {
   try {
@@ -118,6 +119,7 @@ const savedProject = async (req, res, next) => {
       { new: true }
     ).populate("bookmark");
     res.json(user.bookmark);
+    //console.log(user);
   } catch (error) {
     next(error);
   }
@@ -143,7 +145,7 @@ const removeProject = async (req, res, next) => {
 const getBookmarks = async (req, res, next) => {
   try {
     const id = req.user.id;
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("bookmark");
     res.json(user.bookmark);
   } catch (error) {
     next(error);
