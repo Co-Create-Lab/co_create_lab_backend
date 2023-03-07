@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 8080;
 
  app.use(
    cors({
-     origin: ["https://co-create-lab.netlify.app", "http://localhost:3000", "https://co-create-lab-backend.onrender.com/"],
+     origin: ["https://co-create-lab.netlify.app", "http://localhost:3000", "https://co-create-lab-backend.onrender.com", "https://co-create-lab.onrender.com"],
      credentials: true,
    })
  );
