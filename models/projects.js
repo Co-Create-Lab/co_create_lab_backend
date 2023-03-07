@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const mongoosePaginate = require('mongoose-paginate');
-
+const mongoosePaginate = require("mongoose-paginate");
 
 const projectSchema = new Schema(
   {
@@ -15,10 +14,8 @@ const projectSchema = new Schema(
     views: { type: Number, default: 0 },
     likes: [{ type: mongoose.ObjectId, ref: "User", default: [] }],
     coordinates: [{ type: Number }],
-
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-
 
 module.exports = mongoose.model("Project", projectSchema);
